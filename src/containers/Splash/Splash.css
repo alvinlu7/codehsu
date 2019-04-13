@@ -1,0 +1,25 @@
+.main-page{
+    display: flex
+}
+
+#splash-image{
+    width: 100% important!;
+    z-index: -50;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+#main-card{
+    position: relative;
+    top: 25%;
+    left: 5%;
+    background-color: rgba(0,0,0,.60);
+    padding: 5% 5%;
+    margin: 5% 5%;
+}
+
+#main-typo{
+    color: #ffffff;
+    opacity: 1;
+}
