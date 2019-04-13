@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
+import {auth} from '../../backend/Firebase';
+
+//{auth.currentUser.uid}
 
 class Home extends Component {
-
     render(){
         return (
             <div>
-                {this.context.userID}
+                
             </div>
         );
     }

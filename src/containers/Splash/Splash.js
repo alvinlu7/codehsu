@@ -5,7 +5,6 @@ import LoginCard from '../../components/LoginCard/LoginCard';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import {auth} from '../../backend/Firebase';
-import AuthContext from '../../context/auth-context';
 
 
 
@@ -38,7 +37,7 @@ class Splash extends Component {
     }
 
     onSignUp = () =>{
-
+        this.props.history.push('/registration');
     }
 
     onEmailChange = (event) => {
