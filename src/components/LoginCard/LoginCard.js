@@ -13,7 +13,8 @@ const styles = theme => ({
   card: {
     minWidth: 275,
     maxWidth: 500,
-    margin: '5%'
+    margin: '5%',
+    padding: '2%'
   },
   bullet: {
     display: 'inline-block',
@@ -40,17 +41,20 @@ const styles = theme => ({
     menu: {
       width: 200,
     },
+    button: {
+      position: "absolute",
+      bottom: 0
+    }
 });
 
 function SimpleCard(props) {
   const { classes } = props;
-  const bull = <span className={classes.bullet}>•</span>;
 
   return (
     <Card className={classes.card}>
       <CardContent>
         <Typography variant="h4" align="center">
-        Login
+        Already a member?
         </Typography>
         <TextField
           id="email"
@@ -69,6 +73,21 @@ function SimpleCard(props) {
           type="password"
           fullWidth
         />
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          size="large" 
+          onClick={props.login}
+          fullWidth
+          id="login-button">
+            Login
+          </Button>
       </CardContent>
     </Card>
   );
