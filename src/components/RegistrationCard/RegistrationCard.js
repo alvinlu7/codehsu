@@ -8,6 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 const styles = theme => ({
   root: {
@@ -40,9 +42,10 @@ function SimpleCard(props) {
           >
       <Grid container 
       justify = "center"
+      alignItems = "center"
       direction="column">
       <Typography variant="h3" align="center">
-                Registration
+        Registration
       </Typography>
       <br/>
       <Typography variant="h6" align="center">
@@ -51,13 +54,18 @@ function SimpleCard(props) {
       <br/>
       <Button color={businessButton}
         variant="contained"
-        onClick={props.businessChangedHandler}>
+        onClick={props.businessChangedHandler}
+        fullWidth
+        >
         Business
         </Button>
         <Button color={studentButton}
         variant="contained"
-        onClick={props.studentChangedHandler}>
+        onClick={props.studentChangedHandler}
+        fullWidth
+        >
         Student
+        
         </Button>
       <br/>
       <TextField
@@ -118,16 +126,22 @@ function SimpleCard(props) {
         <br/>
         <br/>
         <br/>
+
+        {props.submitting ?
+        <CircularProgress align="center"/>
+        :
         <Button 
         className={classes.button}
         color="primary"
         variant="contained"
         size="large"
+        fullWidth
         onClick={props.submit}>
           Submit
         </Button>
-        </Grid>
+      }
         
+        </Grid>
     </Paper>
   );
 }

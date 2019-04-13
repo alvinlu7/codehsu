@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import TextField from '@material-ui/core/TextField';
+import Layout from '../../components/Layout/Layout';
+import NewPostCard from '../../components/NewPostCard/NewPostCard';
+import {auth, db} from '../../backend/Firebase';
 
 class CreatePost extends Component{
     state = {
@@ -7,105 +10,144 @@ class CreatePost extends Component{
         pitch: null,
         description: null,
         difficulty: null,
-        tags: null,
-        compensation: null
+        tags: [],
+        compensation: null,
+        tagsValue: null
     }
 
-    titleChangeHandler = (event) => {
-        const oldState = this.state;
+    titleChangedHandler = (event) => {
+        const oldState = {...this.state};
         this.setState({
             ...oldState,
             title: event.target.value
         });
     }
 
-    pitchChangeHandler = (event) => {
-        const oldState = this.state;
+    pitchChangedHandler = (event) => {
+        const oldState = {...this.state};
         this.setState({
             ...oldState,
             pitch: event.target.value
         });
     }
 
-    descriptionChangeHandler = (event) => {
-        const oldState = this.state;
+    descriptionChangedHandler = (event) => {
+        const oldState = {...this.state};
         this.setState({
             ...oldState,
             description: event.target.value
         });
     }
 
-    difficultyChangeHandler = (event) => {
-        const oldState = this.state;
+    difficultyChangedHandler = (event, difficulty) => {
+        const oldState = {...this.state};
         this.setState({
             ...oldState,
-            difficulty: event.target.value
+            difficulty: difficulty
         });
     }
 
-    tagsChangeHandler = (event) => {
-        const oldState = this.state;
+    tagsAddHandler = (event) => {
+        let oldState = {...this.state};
+        if(event.keyCode == 13){
+            if(event.target.value){
+                console.log("what")
+                oldState.tags.push(event.target.value);
+                this.setState({
+                    ...oldState,
+                    tags: oldState.tags,
+                    tagsValue: ""
+                });
+            }
+        }
+    }
+
+    tagsChangedHandler = (event) =>{
+        let oldState = {...this.state};
         this.setState({
             ...oldState,
-            tags: event.target.value
+            tagsValue: event.target.value
         });
     }
 
-    compensationChangeHandler = (event) => {
-        const oldState = this.state;
+    handleDeleteTag = (index) => {
+        let oldState = {...this.state};
+        oldState.tags.splice(index, 1);
+        this.setState({
+            ...oldState,
+            tags: oldState.tags
+        });
+
+    }
+
+    compensationChangedHandler = (event) => {
+        const oldState = {...this.state};
         this.setState({
             ...oldState,
             compensation: event.target.value
         });
     }
 
+
+    //TODO: finish this function lol
+    onSubmit = () =>{
+
+        if(this.state.title &&
+            this.state.pitch &&
+            this.state.description &&
+            this.state.difficulty &&
+            this.state.tags &&
+            this.state.compensation){
+
+            const userID = auth.currentUser.uid;
+            db.collection("posts").doc().set({
+                title: this.state.title,
+                pitch: this.state.pitch,
+                description: this.state.description,
+                difficulty: this.state.difficulty,
+                tags: this.state.tags,
+                compensation: this.state.compensation,
+                timestamp: new Date().getTime(),
+                auth_id: userID
+            })
+            .then(() => {
+                this.props.history.push('/home');
+            })
+            .catch(function(error) {
+                alert("Error writing document: ", error);
+            });
+        }
+        else{
+            alert("Please fill out everything (including tags)")
+        }
+
+    }
+
     render(){
-
         return(
-            <div>
-                <TextField
-                    id= "postTitle"
-                    label = "Title"
-                    value = {this.state.title}
-                    onChange = {this.titleChangeHandler}
+            <Layout>
+                <NewPostCard
+                title={this.state.title}
+                pitch={this.state.pitch}
+                description={this.state.description}
+                difficulty={this.state.difficulty}
+                tags={this.state.tags}
+                compensation={this.state.compensation}
+                titleChangedHandler={this.titleChangedHandler}
+                pitchChangedHandler={this.pitchChangedHandler}
+                descriptionChangedHandler={this.descriptionChangedHandler}
+                difficultyChangedHandler={this.difficultyChangedHandler}
+                tagsChangedHandler={this.tagsChangedHandler}
+                compensationChangedHandler={this.compensationChangedHandler}
+                submit={this.onSubmit}
+                tagsValue={this.state.tagsValue}
+                handleDeleteTag={this.handleDeleteTag}
+                tagsAddHandler={this.tagsAddHandler}
                 />
-
-                <TextField
-                    id= "pitch"
-                    label = "Pitch"
-                    value = {this.state.pitch}
-                    onChange = {this.pitchChangeHandler}
-                />
-
-                <TextField
-                    id= "description"
-                    label = "Description"
-                    value = {this.state.description}
-                    onChange = {this.descriptionChangeHandler}
-                />
-                <TextField
-                    id= "difficulty"
-                    label = "Difficulty"
-                    value = {this.state.difficulty}
-                    onChange = {this.difficultyChangeHandler}
-                />
-                <TextField
-                    id= "tags"
-                    label = "Tags"
-                    value = {this.state.tags}
-                    onChange = {this.tagsChangeHandler}
-                />
-
-                <TextField
-                    id= "compensation"
-                    label = "Compensation"
-                    value = {this.state.compensation}
-                    onChange = {this.compensationChangeHandler}
-                />
-            </div>
+            </Layout>
         )
     }
 
 }
 
-export default CreatePost
+export default CreatePost;

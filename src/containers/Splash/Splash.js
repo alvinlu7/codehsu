@@ -21,7 +21,7 @@ class Splash extends Component {
             .then(()=>{
                 this.props.history.push('/home');
             })
-            .catch(function(error) {
+            .catch((error) => {
                 console.log(error.code + ": " + error.message);
                 this.onFailedHandler();
             });

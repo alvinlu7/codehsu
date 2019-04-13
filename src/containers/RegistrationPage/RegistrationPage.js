@@ -3,7 +3,6 @@ import RegistrationCard from '../../components/RegistrationCard/RegistrationCard
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import {auth, db} from '../../backend/Firebase';
-
 import './RegistrationPage.css'
 
 class RegistrationForm extends Component{
@@ -14,11 +13,12 @@ class RegistrationForm extends Component{
         email: null,
         bio: null,
         business: null,
-        password: null
+        password: null,
+        submitting: false
     }
 
     nameChangedHandler = (event) => {
-        const oldState = this.state;
+        const oldState = {...this.state};
         this.setState({
             ...oldState,
             name: event.target.value
@@ -26,7 +26,7 @@ class RegistrationForm extends Component{
     }
 
     addressChangedHandler = (event) => {
-        const oldState = this.state;
+        const oldState = {...this.state};
         this.setState({
             ...oldState,
             address: event.target.value
@@ -34,7 +34,7 @@ class RegistrationForm extends Component{
     }
 
     phoneChangedHandler = (event) => {
-        const oldState = this.state;
+        const oldState = {...this.state};
         this.setState({
             ...oldState,
             phone: event.target.value
@@ -42,7 +42,7 @@ class RegistrationForm extends Component{
     }
 
     emailChangedHandler = (event) => {
-        const oldState = this.state;
+        const oldState = {...this.state};
         this.setState({
             ...oldState,
             email: event.target.value
@@ -50,7 +50,7 @@ class RegistrationForm extends Component{
     }
 
     bioChangedHandler = (event) => {
-        const oldState = this.state;
+        const oldState = {...this.state};
         this.setState({
             ...oldState,
             bio: event.target.value
@@ -58,7 +58,7 @@ class RegistrationForm extends Component{
     }
 
     passwordChangedHandler = (event) => {
-        const oldState = this.state;
+        const oldState = {...this.state};
         this.setState({
             ...oldState,
             password: event.target.value
@@ -66,7 +66,7 @@ class RegistrationForm extends Component{
     }
 
     studentChangedHandler = (event) => {
-        const oldState = this.state;
+        const oldState = {...this.state};
         this.setState({
             ...oldState,
             business: false
@@ -74,7 +74,7 @@ class RegistrationForm extends Component{
     }
 
     businessChangedHandler = (event) => {
-        const oldState = this.state;
+        const oldState = {...this.state};
         this.setState({
             ...oldState,
             business: true
@@ -83,6 +83,8 @@ class RegistrationForm extends Component{
 
     submitHandler = () => {
         let businessAddress = false;
+        const oldState = {...this.state};
+        this.setState({...oldState, submitting: true});
 
         if((this.state.business && this.state.address) ||
             this.state.business === false){
@@ -116,9 +118,9 @@ class RegistrationForm extends Component{
                             console.error("Error writing document: ", error);
                         });
                     })
-                    .catch(function(error) {
+                    .catch((error) => {
                         console.log(error.code + ": " + error.message);
-                        this.onFailedHandler();
+                        alert("Check your email and password");
                     });
 
             })
@@ -134,7 +136,6 @@ class RegistrationForm extends Component{
 
    render() {
 
-    console.log(this.state);
     return(
         <Grid container justify = "center">
             
@@ -156,6 +157,7 @@ class RegistrationForm extends Component{
             student={this.state.student}
             submit={this.submitHandler}
             password={this.state.password}
+            submitting={this.state.submitting}
         />
         </Grid>
         
