@@ -1,5 +1,5 @@
 .main-page{
-    display: flex
+    display: flex;
 }
 
 #splash-image{
@@ -10,7 +10,43 @@
     left: 0px;
 }
 
+.mobile-wrapper{
+    min-height: 100%
+}
+
+img.bg {
+    z-index: -50;
+    /* Set rules to fill background */
+    min-height: 100%;
+    min-width: 1024px;
+      
+    /* Set up proportionate scaling */
+    width: 100%;
+    height: auto;
+      
+    /* Set up positioning */
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+
+#splash-image-mobile{
+    min-height: 100%;
+    z-index: -50;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
 #main-card{
+    position: relative;
+    top: 25%;
+    background-color: rgba(0,0,0,.60);
+    padding: 5% 5%;
+    margin: 5% 5%;
+}
+
+#main-card-mobile{
     position: relative;
     top: 25%;
     background-color: rgba(0,0,0,.60);

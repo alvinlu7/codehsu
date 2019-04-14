@@ -19,7 +19,8 @@ class RegistrationForm extends Component{
         business: null,
         password: null,
         passwordMatch: null,
-        submitting: false
+        submitting: false,
+        errors: {}
     }
 
     
@@ -132,28 +133,30 @@ class RegistrationForm extends Component{
         const oldState = {...this.state};
         this.setState({...oldState, submitting: true});
        
-        const errors = {};
+        let errors = {};
         let properInput = true;
         let matchedPassword = true;
 
         if(!this.state.firstName || !this.state.lastName)
         {
             console.log("first name and last name")
-            alert('Name required')
+            //alert('Name required')
+            errors['name'] = true;
             properInput= false;
         }
 
         if(!this.state.city)
         {
             console.log("city")
-            alert('City Required')
+            //alert('City Required')
+            errors.city = true;
             properInput = false;
         }
 
         if(!/^[0-9]{5}$/i.test(this.state.zipCode))
         {
             console.log("zip code")
-            errors.zipCode = 'Postal Code not 5 digits'
+            errors.zipCode = true;
             properInput = false;
 
         }
@@ -161,32 +164,32 @@ class RegistrationForm extends Component{
         if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(this.state.email))
         {
             console.log("email")
-            errors.email = 'Invalid email address'
-            alert(errors.email)
+            errors.email = true;
+            //alert(errors.email)
             properInput = false;
         }
 
         if(!/^[0-9]{3}\-[0-9]{3}\-[0-9]{4}$/i.test(this.state.phone))
         {
             console.log("phone")
-            errors.phone = 'Invalid phone number'
-            alert(errors.phone)
+            errors.phone = true;
+            //alert(errors.phone)
             properInput = false;
         }
 
         if(!/^\w{8,}$/i.test(this.state.password))
         {
             console.log("password short")
-            errors.password = 'Password too short'
-            alert(errors.password)
+            errors.password = true;
+            //alert(errors.password)
             properInput = false;
             
         }
         if(this.state.password !== this.state.passwordMatch)
         {
             console.log("password")
-            errors.password = 'Passwords do not match'
-            alert(errors.password);
+            errors.password = true;
+            //alert(errors.password);
             matchedPassword = false;
             properInput = false;
         }
@@ -196,12 +199,14 @@ class RegistrationForm extends Component{
             businessAddress = true; 
         }
         else{
-            //alert("Select an account type");
+            //errors.accountType = true;
+            alert("Select an account type or fill out address");
         }
         console.log("Business: " + this.state.business);
         console.log("Address:" + this.state.locAddress);
         console.log("Proper input: " +properInput);
         console.log("Business Address: " + businessAddress);
+        console.log(errors);
 
         if(businessAddress && properInput){
 
@@ -243,12 +248,11 @@ class RegistrationForm extends Component{
 
         }
         else{
-            this.setState({...oldState, submitting: false});
-        }
-        else{
 
-            var errorString = "Please check the following fields: ";
-            if(this.state.business === null){
+            const oldState = {...this.state};
+            this.setState({...oldState, submitting: false, errors: errors});
+            //var errorString = "Please check the following fields: ";
+            /*if(this.state.business === null){
                 errorString += '- account type'
             }
             if(errors.name)
@@ -282,8 +286,8 @@ class RegistrationForm extends Component{
             }
             
             alert(errorString);
-            const oldState = {...this.state};
-            this.setState({...oldState, submitting: false})
+            */
+            
         }
     }
 
@@ -320,6 +324,7 @@ class RegistrationForm extends Component{
             password={this.state.password}
             passwordMatch={this.state.passwordMatch}
             submitting={this.state.submitting}
+            errors={this.state.errors}
         />
         </Grid>
         

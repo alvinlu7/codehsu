@@ -64,8 +64,8 @@ class Home extends Component {
         if(Posts){
             if(this.state.search){
                 Posts = Posts.filter((post) => {
-                    const title = post.title;
-                    return title.includes(this.state.search);
+                    const title = post.title.toLowerCase();
+                    return title.includes(this.state.search.toLowerCase());
                 })
             }
             Posts = Posts.map((post, index) => {
@@ -80,9 +80,7 @@ class Home extends Component {
         }
         else{
             Posts = <CircularProgress align="center"/>
-
         }
-        console.log(this.state);
 
         return (
             <Layout isHome onSearch={this.onSearch}>
