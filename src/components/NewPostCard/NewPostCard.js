@@ -76,7 +76,7 @@ function SimpleCard(props) {
 
     <TextField
         id= "pitch"
-        label = "Pitch (Less than 100 words)"
+        label = "Pitch (Less than 500 character)"
         value = {props.pitch}
         onChange = {props.pitchChangedHandler}
     />

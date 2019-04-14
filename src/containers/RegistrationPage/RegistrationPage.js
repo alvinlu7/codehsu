@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import RegistrationCard from '../../components/RegistrationCard/RegistrationCard';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import {auth, db} from '../../backend/Firebase';
+import {auth, db, storage} from '../../backend/Firebase';
 import './RegistrationPage.css'
 
 class RegistrationForm extends Component{
@@ -20,7 +20,8 @@ class RegistrationForm extends Component{
         password: null,
         passwordMatch: null,
         submitting: false,
-        errors: {}
+        errors: {},
+        image: null
     }
 
     
@@ -128,6 +129,14 @@ class RegistrationForm extends Component{
         });
     }
 
+    handleImage = (base64) =>{
+        const oldState = {...this.state};
+        this.setState({
+            ...oldState,
+            image: base64
+        });
+    }
+
     submitHandler = () => {
         let businessAddress = false;
         const oldState = {...this.state};
@@ -145,7 +154,7 @@ class RegistrationForm extends Component{
             properInput= false;
         }
 
-        if(!this.state.city)
+        if(!this.state.city && this.state.business)
         {
             console.log("city")
             //alert('City Required')
@@ -153,7 +162,7 @@ class RegistrationForm extends Component{
             properInput = false;
         }
 
-        if(!/^[0-9]{5}$/i.test(this.state.zipCode))
+        if(!/^[0-9]{5}$/i.test(this.state.zipCode) && this.state.business)
         {
             console.log("zip code")
             errors.zipCode = true;
@@ -220,6 +229,10 @@ class RegistrationForm extends Component{
                 auth.signInWithEmailAndPassword(this.state.email, this.state.password)
                     .then(()=>{
                         const userID = auth.currentUser.uid;
+                        if(this.state.image){
+                            storage.ref().child('users/'+userID)
+                                .putString(this.state.image, 'data_url', {contentType:'image/jpg'});
+                        }
                         db.collection("users").doc(userID).set({
                             name: name,
                             address: address,
@@ -292,6 +305,7 @@ class RegistrationForm extends Component{
     }
 
    render() {
+       console.log(this.state);
     return(
         <Grid container justify = "center">
             
@@ -325,6 +339,7 @@ class RegistrationForm extends Component{
             passwordMatch={this.state.passwordMatch}
             submitting={this.state.submitting}
             errors={this.state.errors}
+            handleImage={this.handleImage}
         />
         </Grid>
         

@@ -2,12 +2,13 @@ import React, {Component} from 'react';
 //import {auth} from '../../backend/Firebase';
 import { withStyles } from '@material-ui/core/styles';
 import Layout from '../../components/Layout/Layout';
-import {db} from '../../backend/Firebase';
+import {db, storage} from '../../backend/Firebase';
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import PostCard from '../../components/PostCard/PostCard'
+import PostCard from '../../components/PostCard/PostCard';
+import Avatar from '@material-ui/core/Avatar';
 
 const styles = {
     card: {
@@ -26,19 +27,33 @@ const styles = {
     pos: {
       marginBottom: 12,
     },
+    bigAvatar: {
+        margin: 10,
+        width: 60,
+        height: 60,
+    },
   };
 
 class Profile extends Component {
     state = {
-        user: null
+        user: null,
+        image: null
     }
 
     componentDidMount = () => {
         const userID = this.props.match.params.id;
+        storage.ref('users/'+userID).getDownloadURL().then((url) => {
+            const oldState = this.state;
+            this.setState({...oldState, image: url});
+        })
+        .catch(error=>{
+
+        });
         db.collection('users').doc(userID).get()
         .then((doc) => {
             if (doc.exists) {
-                this.setState({user: doc.data()});
+                const oldState = this.state;
+                this.setState({...oldState, user: doc.data()});
             } else {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");
@@ -67,9 +82,15 @@ class Profile extends Component {
                     alignItems = "center"
                     direction="column">
                     <br/>
+                    
                     <Typography variant="h4">
                         {this.state.user.name}
                     </Typography>
+
+                    {this.state.image ? 
+                        <Avatar src={this.state.image} className={classes.bigAvatar} />
+                    :null}
+                    
                     <br/>
                     <Typography variant="subtitle2">
                         Address: {this.state.user.address}

@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { ImagePicker } from 'react-file-picker'
 
 
 const styles = theme => ({
@@ -101,7 +102,6 @@ function SimpleCard(props) {
         value = {props.locAddress}
         onChange = {props.locAddressChangedHandler}
         fullWidth
-        error = {props.errors.name}
         />
 
         <TextField
@@ -192,6 +192,17 @@ function SimpleCard(props) {
         onChange = {props.bioChangedHandler}
         fullWidth
         />
+        <br/>
+        <ImagePicker
+          extensions={['jpg', 'jpeg', 'png']}
+          dims={{minWidth: 100, maxWidth: 600, minHeight: 100, maxHeight: 600}}
+          onChange={base64 => props.handleImage(base64)}
+          onError={(error) => alert("Error uploading image")}
+        >
+          <Button variant="contained" color="secondary">
+            Upload Profile Picture
+          </Button>
+        </ImagePicker>
         <br/>
         <br/>
         <br/>

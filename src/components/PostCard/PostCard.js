@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {Link} from 'react-router-dom';
-import {auth, db} from '../../backend/Firebase';
+import {auth, db, storage} from '../../backend/Firebase';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -14,6 +14,8 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Avatar from '@material-ui/core/Avatar';
+
 
 
 const styles = theme => ({
@@ -47,9 +49,38 @@ class SimpleExpansionPanel extends Component {
             querySnapshot.forEach((doc) => {
                 comments.push({...doc.data(), id: doc.id});
             });
-            this.setState({comments: comments})
+            let oldState = this.state;
+            //this.loadImages(comments);
+            this.setState({...oldState, comments: comments});
         });
     }
+
+    //TODO: Load avatar images ... one day
+    /*
+    loadImages = (comments) =>{
+        var comments = comments.map(comment => {
+            storage.ref('users/'+comment.user_id).getDownloadURL()
+                .then((url) => {
+                    return {...comment, image: url};
+                })
+                .catch(error=>{
+                    return {...comment, image: null};
+                });
+        });
+        console.log(comments);
+
+        var oldState = {...this.state};
+        this.setState({...oldState, comments: comments});
+    }*/
+    /*storage.ref('users/'+doc.data().user_id).getDownloadURL()
+                .then((url) => {
+                    console.log(url)
+                    comments.push({...doc.data(), id: doc.id, image: url});
+                })
+                .catch(error=>{
+                    console.log("Did not fetch images")
+                    
+                });*/
 
     onComment = (event) =>{
         var oldState = {...this.state};
@@ -91,6 +122,9 @@ class SimpleExpansionPanel extends Component {
                     <Card>
                         <CardContent>
                             <Link to={'/'+comment.user_id}>
+                            {comment.image ? 
+                            <Avatar src={comment.image}/>
+                            :null}
                             <Typography variant="body1">
                                 {comment.name}
                             </Typography>
@@ -108,10 +142,9 @@ class SimpleExpansionPanel extends Component {
             <div className={classes.root}>
             <ExpansionPanel>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                    <Grid container direction="column"
-                            >
-                        <Typography className={classes.heading}>{this.props.post.title}</Typography>
-                        <Typography className={classes.caption}>{this.props.post.pitch}</Typography>
+                    <Grid container direction="column">
+                    <Typography className={classes.heading}>{this.props.post.title}</Typography>
+                    <Typography className={classes.caption}><p>{this.props.post.pitch}</p></Typography>
                     </Grid>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>

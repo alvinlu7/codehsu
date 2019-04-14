@@ -10,7 +10,7 @@ var config = {
   };
 firebase.initializeApp(config);
 
-var storage = firebase.storage().ref();
+var storage = firebase.storage();
 var db = firebase.firestore();
 var auth = firebase.auth();
 
