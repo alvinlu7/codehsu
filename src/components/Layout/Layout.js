@@ -123,7 +123,8 @@ class PrimarySearchAppBar extends React.Component {
     }
     
     goToProfile = () =>{
-        
+      const userID = auth.currentUser.uid;
+      this.props.history.push('/'+userID);
     }
 
     goToAddPost = () => {

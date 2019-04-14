@@ -7,6 +7,9 @@ import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import PostCard from '../../components/PostCard/PostCard'
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 const styles = {
     card: {
@@ -42,25 +45,29 @@ class Home extends Component {
             this.setState({posts: posts})
         });
     }
+
+    goToBusiness = (event, auth_id) => {
+        console.log(auth_id);
+        this.props.history.push('/'+auth_id);
+    }
+
     render(){
         const { classes } = this.props;
         let Posts = null;
         if(this.state.posts){
             Posts = this.state.posts.map((post, index) => {
                 return (
-                    <Card height="10%" className={classes.card}>
-                            <CardContent>
-                                <Typography variant="h4">
-                                    {post.title}
-                                </Typography>
-                                <Typography varian="body">
-                                    {post.pitch}
-                                </Typography>
-                            </CardContent>
-                        
-                    </Card>
+                    <PostCard
+                        key = {index}
+                        post = {post}
+                        goToBusiness = {this.goToBusiness}
+                    />
                 )
             });
+        }
+        else{
+            Posts = <CircularProgress align="center"/>
+
         }
         console.log(this.state);
 
@@ -70,6 +77,11 @@ class Home extends Component {
                     justify = "center"
                     alignItems = "center"
                     direction="column">
+                    <br/>
+                    <Typography variant="h4">
+                        Project Listings
+                    </Typography>
+                    <br/>
                     {Posts}
                 </Grid>
                 
