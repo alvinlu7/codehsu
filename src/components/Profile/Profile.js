@@ -141,9 +141,13 @@ class Profile extends Component {
                     :null}
                     
                     <br/>
-                    <Typography variant="subtitle2">
+                    {this.state.user.business
+                    ?
+                        <Typography variant="subtitle2">
                         Address: {this.state.user.address}
-                    </Typography>
+                        </Typography>
+                    : null}
+                    
                     <Typography variant="subtitle2">
                         Email: {this.state.user.email}
                     </Typography>
