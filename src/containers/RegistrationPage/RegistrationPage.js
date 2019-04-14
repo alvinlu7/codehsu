@@ -7,8 +7,12 @@ import './RegistrationPage.css'
 
 class RegistrationForm extends Component{
     state = {
-        name: null,
-        address: null,
+        firstName: null,
+        lastName: null,
+        locAddress: null,
+        city: null,
+        theState: "California",
+        zipCode: null,
         phone: null,
         email: null,
         bio: null,
@@ -20,19 +24,50 @@ class RegistrationForm extends Component{
 
     
 
-    nameChangedHandler = (event) => {
+    firstNameChangedHandler = (event) => {
         const oldState = {...this.state};
         this.setState({
             ...oldState,
-            name: event.target.value
+            firstName: event.target.value
+        });
+    }
+    lastNameChangedHandler = (event) => {
+        const oldState = {...this.state};
+        this.setState({
+            ...oldState,
+            lastName: event.target.value
         });
     }
 
-    addressChangedHandler = (event) => {
+    locAddressChangedHandler = (event) => {
         const oldState = {...this.state};
         this.setState({
             ...oldState,
-            address: event.target.value
+            locAddress: event.target.value
+        });
+    }
+
+    cityChangedHandler = (event) => {
+        const oldState = {...this.state};
+        this.setState({
+            ...oldState,
+            city: event.target.value
+        });
+    }
+
+    theStateChangedHandler = (event) => {
+        const oldState = {...this.state};
+        this.setState({
+            ...oldState,
+            theState: event.target.value
+        });
+    }
+
+    zipCodeChangedHandler = (event) => {
+        const oldState = {...this.state};
+        this.setState({
+            ...oldState,
+            zipCode: event.target.value
         });
     }
 
@@ -101,10 +136,33 @@ class RegistrationForm extends Component{
         let properInput = true;
         let matchedPassword = true;
 
+        if(!this.state.firstName || !this.state.lastName)
+        {
+            console.log("first name and last name")
+            alert('Name required')
+            properInput= false;
+        }
+
+        if(!this.state.city)
+        {
+            console.log("city")
+            alert('City Required')
+            properInput = false;
+        }
+
+        if(!/^[0-9]{5}$/i.test(this.state.zipCode))
+        {
+            console.log("zip code")
+            errors.zipCode = 'Postal Code not 5 digits'
+            properInput = false;
+
+        }
+
         if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(this.state.email))
         {
             console.log("email")
             errors.email = 'Invalid email address'
+            alert(errors.email)
             properInput = false;
         }
 
@@ -112,26 +170,45 @@ class RegistrationForm extends Component{
         {
             console.log("phone")
             errors.phone = 'Invalid phone number'
+            alert(errors.phone)
             properInput = false;
         }
 
+        if(!/^\w{8,}$/i.test(this.state.password))
+        {
+            console.log("password short")
+            errors.password = 'Password too short'
+            alert(errors.password)
+            properInput = false;
+            
+        }
         if(this.state.password !== this.state.passwordMatch)
         {
             console.log("password")
             errors.password = 'Passwords do not match'
+            alert(errors.password);
             matchedPassword = false;
             properInput = false;
         }
 
-        if((this.state.business && this.state.address) ||
+        if((this.state.business && this.state.locAddress) ||
             this.state.business === false){
             businessAddress = true; 
         }
-
+        else{
+            //alert("Select an account type");
+        }
+        console.log("Business: " + this.state.business);
+        console.log("Address:" + this.state.locAddress);
         console.log("Proper input: " +properInput);
         console.log("Business Address: " + businessAddress);
 
         if(businessAddress && properInput){
+
+            const name = this.state.firstName + " " + this.state.lastName;
+
+            const address = this.state.locAddress + " " + this.state.city
+                            + ", " + this.state.theState + " " + this.state.zipCode;
 
             auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
             .then(()=>{
@@ -139,8 +216,8 @@ class RegistrationForm extends Component{
                     .then(()=>{
                         const userID = auth.currentUser.uid;
                         db.collection("users").doc(userID).set({
-                            name: this.state.name,
-                            address: this.state.address,
+                            name: name,
+                            address: address,
                             phone: this.state.phone,
                             email: this.state.email,
                             bio: this.state.bio,
@@ -166,9 +243,12 @@ class RegistrationForm extends Component{
 
         }
         else{
+            this.setState({...oldState, submitting: false});
+        }
+        else{
 
             var errorString = "Please check the following fields: ";
-            if(businessAddress === false){
+            if(this.state.business === null){
                 errorString += '- account type'
             }
             if(errors.name)
@@ -186,7 +266,7 @@ class RegistrationForm extends Component{
                 errorString += "- email ";
             } 
             
-            if(errors.address)
+            if(errors.address || errors.city || errors.zipCode)
             {
                 errorString += "- address ";
             }
@@ -212,8 +292,12 @@ class RegistrationForm extends Component{
         <Grid container justify = "center">
             
             <RegistrationCard
-            nameChangedHandler={this.nameChangedHandler}
-            addressChangedHandler={this.addressChangedHandler}
+            firstNameChangedHandler={this.firstNameChangedHandler}
+            lastNameChangedHandler={this.lastNameChangedHandler}
+            locAddressChangedHandler={this.locAddressChangedHandler}
+            cityChangedHandler={this.cityChangedHandler}
+            theStateChangedHandler={this.theStateChangedHandler}
+            zipCodeChangedHandler={this.zipCodeChangedHandler}
             phoneChangedHandler={this.phoneChangedHandler}
             emailChangedHandler={this.emailChangedHandler}
             bioChangedHandler={this.bioChangedHandler}
@@ -221,8 +305,12 @@ class RegistrationForm extends Component{
             businessChangedHandler={this.businessChangedHandler}
             passwordChangedHandler={this.passwordChangedHandler}
             passwordMatchChangedHandler={this.passwordMatchChangedHandler}
-            name={this.state.name}
-            address={this.state.address}
+            firstName={this.state.firstName}
+            lastName={this.state.lastName}
+            locAddress={this.state.locAddress}
+            city={this.state.city}
+            theState={this.state.theState}
+            zipCode={this.state.zipCode}
             phone={this.state.phone}
             email={this.state.email}
             bio={this.state.bio}

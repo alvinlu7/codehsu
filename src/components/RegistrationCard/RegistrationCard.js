@@ -68,28 +68,70 @@ function SimpleCard(props) {
         
         </Button>
       <br/>
+
+      <Grid container direction="row">
       <TextField
-            id = "regName"
-            label = "Name"
-            value = {props.name}
-            onChange = {props.nameChangedHandler}
-            fullWidth
+            id = "regFirstName"
+            label = "First Name"
+            value = {props.firstName}
+            onChange = {props.firstNameChangedHandler}
+  
+        />
+
+        <TextField
+            id = "regLastName"
+            label = "Last Name"
+            value = {props.lastName}
+            onChange = {props.lastNameChangedHandler}
+            
         />
         
-        <br/>
-        {props.business ?
-        <div><TextField
-        id = "regAddress"
+      </Grid>
+      
+      <Grid container direction = "row">
+      {props.business ?
+        <div>
+        <TextField
+        id = "regLocAddress"
         label = "Address"
-        value = {props.address}
-        onChange = {props.addressChangedHandler}
+        value = {props.locAddress}
+        onChange = {props.locAddressChangedHandler}
         fullWidth
-        /><br/></div>
+        />
+
+        <TextField
+        id = "regCity"
+        label = "City"
+        value = {props.city}
+        onChange = {props.cityChangedHandler}
+        />
+
+        <TextField
+        id = "regState"
+        label = "State"
+        value = {props.theState}
+        />
+
+        <TextField
+        id = "regzipCode"
+        label = "Postal Code"
+        type = "number"
+        value = {props.zipCode}
+        onChange = {props.zipCodeChangedHandler}
+         />  
+        
+        
+        </div>
+        
         : null}
+      </Grid>
+        <br/>
+       
 
         <TextField
         id = "regPhone"
         label = "Phone (###-###-####)"
+        type="phone"
         value = {props.phone}
         onChange = {props.phoneChangedHandler}
         fullWidth
@@ -98,6 +140,7 @@ function SimpleCard(props) {
         <TextField
         id = "regEmail"
         label = "Email (example@gmail.com)"
+        type="email"
         value = {props.email}
         onChange = {props.emailChangedHandler}
         fullWidth
@@ -105,18 +148,21 @@ function SimpleCard(props) {
         <br/>
         <TextField
         id = "regPassword"
-        label = "Password"
+        label = "Password (min. 8 characters)"
         type="password"
         value = {props.password}
         onChange = {props.passwordChangedHandler}
+        minLength = "8"
         fullWidth
         />
         <br/>
         <TextField
             id = "regPasswordMatch"
             label = "Re-enter Password"
+            type="password"
             value = {props.passwordMatch}
             onChange = {props.passwordMatchChangedHandler}
+            minLength = "8"
             fullWidth
         />
         <br/>

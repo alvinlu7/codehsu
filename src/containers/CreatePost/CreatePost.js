@@ -94,12 +94,12 @@ class CreatePost extends Component{
         const errors = {};
         let properInput = true;
 
-        if(this.state.title &&
+        if(/*this.state.title &&
             this.state.pitch &&
             this.state.description &&
             this.state.difficulty &&
             this.state.tags &&
-            this.state.compensation){
+            this.state.compensation*/ properInput){
 
             const userID = auth.currentUser.uid;
             db.collection("posts").doc().set({
@@ -120,6 +120,8 @@ class CreatePost extends Component{
             });
         }
         else{
+
+            
             alert("Please fill out everything (including tags)")
         }
 
