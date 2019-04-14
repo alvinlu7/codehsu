@@ -6,6 +6,7 @@ import Splash from './containers/Splash/Splash';
 import Home from './containers/Home/Home';
 import RegistrationPage from './containers/RegistrationPage/RegistrationPage';
 import CreatePost from './containers/CreatePost/CreatePost';
+import Profile from './components/Profile/Profile';
 class App extends Component {
   render() {
     return (
@@ -14,6 +15,7 @@ class App extends Component {
           <Route path="/createpost" component={CreatePost}/>
           <Route path="/registration" component={RegistrationPage}/>
           <Route path="/home" component={Home}/>
+          <Route path="/:id" component={Profile}/>
           <Route path="/" component={Splash}/>
         </Switch>
       </div>

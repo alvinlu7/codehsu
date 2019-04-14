@@ -38,7 +38,7 @@ function SimpleCard(props) {
   }
   return (
     <Paper className={classes.root} 
-          elevation={1}
+          elevation={3}
           >
       <Grid container 
       justify = "center"
