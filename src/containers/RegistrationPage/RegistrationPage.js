@@ -14,8 +14,11 @@ class RegistrationForm extends Component{
         bio: null,
         business: null,
         password: null,
+        passwordMatch: null,
         submitting: false
     }
+
+    
 
     nameChangedHandler = (event) => {
         const oldState = {...this.state};
@@ -65,6 +68,14 @@ class RegistrationForm extends Component{
         });
     }
 
+    passwordMatchChangedHandler = (event) => {
+        const oldState = {...this.state};
+        this.setState({
+            ...oldState,
+            passwordMatch: event.target.value
+        });
+    }
+
     studentChangedHandler = (event) => {
         const oldState = {...this.state};
         this.setState({
@@ -85,18 +96,36 @@ class RegistrationForm extends Component{
         let businessAddress = false;
         const oldState = {...this.state};
         this.setState({...oldState, submitting: true});
+       
+        const errors = {};
+        let properInput = true;
+        let matchedPassword = true;
+
+        if(!!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(this.state.email))
+        {
+            errors.email = alert('Invalid email address')
+            properInput = false;
+        }
+
+        if(!!/^[0-9]{3}\-[0-9]{3}\-[0-9]{4}\-$/i.test(this.state.phone))
+        {
+            errors.phone = 'Invalid phone number'
+            properInput = false;
+        }
+
+        if(this.state.password !== this.state.passwordMatch)
+        {
+            errors.password = 'Passwords do not match'
+            matchedPassword = false;
+            properInput = false;
+        }
 
         if((this.state.business && this.state.address) ||
             this.state.business === false){
             businessAddress = true; 
         }
 
-        if(this.state.name &&
-            businessAddress &&
-            this.state.phone &&
-            this.state.email &&
-            this.state.bio &&
-            this.state.business !== null){
+        if(businessAddress && properInput){
 
             auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
             .then(()=>{
@@ -120,7 +149,7 @@ class RegistrationForm extends Component{
                     })
                     .catch((error) => {
                         console.log(error.code + ": " + error.message);
-                        alert("Check your email and password");
+                        alert("Account already exists");
                     });
 
             })
@@ -130,12 +159,45 @@ class RegistrationForm extends Component{
 
         }
         else{
-            alert("Please fill out all forms");
+
+            var errorString = "Please check the following fields: ";
+            if(errors.name || properInput != "true")
+            {
+               errorString += "- name ";
+            }
+                
+            if(errors.phone || properInput != "true")
+            {
+                errorString += "- phone ";
+            }
+                
+            if(errors.email || properInput != "true")
+            {
+                errorString += "- email ";
+            } 
+            
+            if(errors.address || properInput != "true")
+            {
+                errorString += "- address ";
+            }
+
+            if(errors.password || properInput != "true")
+            {
+                errorString += "- password ";
+            }
+            
+            if(errors.bio || properInput != "true")
+            {
+                errorString += "- bio ";
+            }
+            
+            alert(errorString);
+            const oldState = {...this.state};
+            this.setState({...oldState, submitting: false})
         }
     }
 
    render() {
-
     return(
         <Grid container justify = "center">
             
@@ -148,6 +210,7 @@ class RegistrationForm extends Component{
             studentChangedHandler={this.studentChangedHandler}
             businessChangedHandler={this.businessChangedHandler}
             passwordChangedHandler={this.passwordChangedHandler}
+            passwordMatchChangedHandler={this.passwordMatchChangedHandler}
             name={this.state.name}
             address={this.state.address}
             phone={this.state.phone}
@@ -157,6 +220,7 @@ class RegistrationForm extends Component{
             student={this.state.student}
             submit={this.submitHandler}
             password={this.state.password}
+            passwordMatch={this.state.passwordMatch}
             submitting={this.state.submitting}
         />
         </Grid>

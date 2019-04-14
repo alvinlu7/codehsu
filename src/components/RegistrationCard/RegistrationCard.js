@@ -86,10 +86,10 @@ function SimpleCard(props) {
         fullWidth
         /><br/></div>
         : null}
-        
+
         <TextField
         id = "regPhone"
-        label = "Phone"
+        label = "Phone (###-###-####)"
         value = {props.phone}
         onChange = {props.phoneChangedHandler}
         fullWidth
@@ -97,7 +97,7 @@ function SimpleCard(props) {
         <br/>
         <TextField
         id = "regEmail"
-        label = "Email"
+        label = "Email (example@gmail.com)"
         value = {props.email}
         onChange = {props.emailChangedHandler}
         fullWidth
@@ -110,6 +110,14 @@ function SimpleCard(props) {
         value = {props.password}
         onChange = {props.passwordChangedHandler}
         fullWidth
+        />
+        <br/>
+        <TextField
+            id = "regPasswordMatch"
+            label = "Re-enter Password"
+            value = {props.passwordMatch}
+            onChange = {props.passwordMatchChangedHandler}
+            fullWidth
         />
         <br/>
         <TextField
