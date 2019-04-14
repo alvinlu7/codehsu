@@ -89,8 +89,10 @@ class CreatePost extends Component{
     }
 
 
-    //TODO: finish this function lol
     onSubmit = () =>{
+
+        const errors = {};
+        let properInput = true;
 
         if(this.state.title &&
             this.state.pitch &&
