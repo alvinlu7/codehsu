@@ -32,7 +32,8 @@ const styles = {
 
 class Home extends Component {
     state = {
-        posts: null
+        posts: null,
+        search: null
     }
 
     componentDidMount = () => {
@@ -51,11 +52,23 @@ class Home extends Component {
         this.props.history.push('/'+auth_id);
     }
 
+    onSearch = (event) => {
+        const oldState = this.state;
+        this.setState({...oldState, search: event.target.value});
+    }
+
     render(){
         const { classes } = this.props;
-        let Posts = null;
-        if(this.state.posts){
-            Posts = this.state.posts.map((post, index) => {
+        let Posts = this.state.posts;
+
+        if(Posts){
+            if(this.state.search){
+                Posts = Posts.filter((post) => {
+                    const title = post.title;
+                    return title.includes(this.state.search);
+                })
+            }
+            Posts = Posts.map((post, index) => {
                 return (
                     <PostCard
                         key = {index}
@@ -72,7 +85,7 @@ class Home extends Component {
         console.log(this.state);
 
         return (
-            <Layout isHome>
+            <Layout isHome onSearch={this.onSearch}>
                 <Grid container 
                     justify = "center"
                     alignItems = "center"

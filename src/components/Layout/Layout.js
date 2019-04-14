@@ -161,6 +161,7 @@ class PrimarySearchAppBar extends React.Component {
                   root: classes.inputRoot,
                   input: classes.inputInput,
                 }}
+                onChange={this.props.onSearch}
               />
             </div>
               : null}
