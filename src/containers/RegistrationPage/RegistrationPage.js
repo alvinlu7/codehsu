@@ -251,6 +251,7 @@ class RegistrationForm extends Component{
 
             const oldState = {...this.state};
             this.setState({...oldState, submitting: false, errors: errors});
+            window.scrollTo(0, 0)
             //var errorString = "Please check the following fields: ";
             /*if(this.state.business === null){
                 errorString += '- account type'

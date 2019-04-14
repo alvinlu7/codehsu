@@ -12,7 +12,8 @@ class CreatePost extends Component{
         difficulty: null,
         tags: [],
         compensation: null,
-        tagsValue: null
+        tagsValue: null,
+        errors: {}
     }
 
     titleChangedHandler = (event) => {
@@ -94,6 +95,56 @@ class CreatePost extends Component{
         const errors = {};
         let properInput = true;
 
+        if(!this.state.title)
+        {
+            console.log("No title")
+            errors.title = true;
+            properInput = false;
+        }
+
+        if(!this.state.pitch || (this.state.pitch.length > 500))
+        {
+            if(!this.state.pitch){
+                console.log("No pitch")
+                errors.pitch = true;
+                properInput = false;
+            }
+            else if(this.state.pitch.length > 500)
+            {
+                console.log("Pitch too long")
+                errors.pitch = true;
+                properInput = false;
+            }
+        }
+
+        if(!this.state.description)
+        {
+            console.log("No description")
+            errors.description = true;
+            properInput = false;
+        }
+
+        if(!this.state.difficulty)
+        {
+            console.log("No diffulty chosen")
+            errors.difficulty = true;
+            properInput = false
+        }
+
+        if(this.state.tags.length == 0)
+        {
+            console.log("No tags chosen")
+            errors.tags = true;
+            properInput = false
+        }
+
+        if(!this.state.compensation)
+        {
+            console.log("No compensation")
+            errors.compensation = true;
+            properInput = false
+        }
+
         if(/*this.state.title &&
             this.state.pitch &&
             this.state.description &&
@@ -121,13 +172,17 @@ class CreatePost extends Component{
         }
         else{
 
-            
-            alert("Please fill out everything (including tags)")
+            var oldState = {...this.state};
+            this.setState({...oldState, errors: errors})
+            window.scrollTo(0, 0)
+
+            //alert("Please fill out everything (including tags)")
         }
 
     }
 
     render(){
+        console.log(this.state);
         return(
             <Layout>
                 <NewPostCard
@@ -147,6 +202,7 @@ class CreatePost extends Component{
                 tagsValue={this.state.tagsValue}
                 handleDeleteTag={this.handleDeleteTag}
                 tagsAddHandler={this.tagsAddHandler}
+                errors={this.state.errors}
                 />
             </Layout>
         )
