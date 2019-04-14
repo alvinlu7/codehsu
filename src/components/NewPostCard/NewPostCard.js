@@ -72,13 +72,23 @@ function SimpleCard(props) {
         label = "Title of Project"
         value = {props.title}
         onChange = {props.titleChangedHandler}
+        error = {props.errors.title}
     />
 
     <TextField
         id= "pitch"
+<<<<<<< HEAD
         label = "Pitch (Less than 500 character)"
+=======
+        label = "Pitch (Less than 500 characters)"
+        type = "text"
+        inputProps = {{maxLength:"500"}}
+        multiline
+        rows = "5"
+>>>>>>> fbb398ede3b108b3654532f9ba6a4b263e42133d
         value = {props.pitch}
         onChange = {props.pitchChangedHandler}
+        error = {props.errors.pitch}
     />
     <br/>
     <TextField
@@ -88,6 +98,7 @@ function SimpleCard(props) {
         rows="4"
         value = {props.description}
         onChange = {props.descriptionChangedHandler}
+        error = {props.errors.description}
     />
     <br/>
 
@@ -127,6 +138,7 @@ function SimpleCard(props) {
         value = {props.tagsValue}
         onKeyDown = {props.tagsAddHandler}
         onChange = {props.tagsChangedHandler}
+        error = {props.errors.tags}
     />
     <Grid  
       alignContent = "center"
@@ -136,9 +148,12 @@ function SimpleCard(props) {
     <br/>
     <TextField
         id= "compensation"
-        label = "Compensation for completion of project"
+        label = "Compensation for completion of project (ex: letters of recommendation, monetary)"
         value = {props.compensation}
+        multiline
+        rows = "3"
         onChange = {props.compensationChangedHandler}
+        error = {props.errors.compensation}
     />
     <br/>
     <br/>
