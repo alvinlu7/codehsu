@@ -70,6 +70,7 @@ function SimpleCard(props) {
           onChange={props.passwordChange}
           margin="normal"
           type="password"
+          onKeyPress = {props.loginEnter}
           fullWidth
         />
         <br/>
