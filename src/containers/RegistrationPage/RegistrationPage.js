@@ -341,6 +341,7 @@ class RegistrationForm extends Component{
             submitting={this.state.submitting}
             errors={this.state.errors}
             handleImage={this.handleImage}
+            image={this.state.image}
         />
         </Grid>
         

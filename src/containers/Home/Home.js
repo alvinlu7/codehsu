@@ -38,7 +38,7 @@ class Home extends Component {
 
     componentDidMount = () => {
         let posts = [];
-        db.collection("posts").get()
+        db.collection("posts").orderBy("timestamp", "desc").get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 posts.push({...doc.data(), id: doc.id});

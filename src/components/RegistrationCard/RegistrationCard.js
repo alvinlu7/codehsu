@@ -199,10 +199,13 @@ function SimpleCard(props) {
           onChange={base64 => props.handleImage(base64)}
           onError={(error) => alert("Error uploading image")}
         >
-          <Button variant="contained" color="secondary">
+          <Button variant="contained" color="secondary" disabled={props.image}>
             Upload Profile Picture
           </Button>
         </ImagePicker>
+        <Typography variant="caption">
+            (jpeg, jpg only, less than 500x500px)
+          </Typography>
         <br/>
         <br/>
         <br/>
