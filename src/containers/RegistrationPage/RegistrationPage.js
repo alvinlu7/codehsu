@@ -101,20 +101,23 @@ class RegistrationForm extends Component{
         let properInput = true;
         let matchedPassword = true;
 
-        if(!!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(this.state.email))
+        if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(this.state.email))
         {
-            errors.email = alert('Invalid email address')
+            console.log("email")
+            errors.email = 'Invalid email address'
             properInput = false;
         }
 
-        if(!!/^[0-9]{3}\-[0-9]{3}\-[0-9]{4}\-$/i.test(this.state.phone))
+        if(!/^[0-9]{3}\-[0-9]{3}\-[0-9]{4}$/i.test(this.state.phone))
         {
+            console.log("phone")
             errors.phone = 'Invalid phone number'
             properInput = false;
         }
 
         if(this.state.password !== this.state.passwordMatch)
         {
+            console.log("password")
             errors.password = 'Passwords do not match'
             matchedPassword = false;
             properInput = false;
@@ -124,6 +127,9 @@ class RegistrationForm extends Component{
             this.state.business === false){
             businessAddress = true; 
         }
+
+        console.log("Proper input: " +properInput);
+        console.log("Business Address: " + businessAddress);
 
         if(businessAddress && properInput){
 
@@ -153,40 +159,44 @@ class RegistrationForm extends Component{
                     });
 
             })
-            .catch(function(error) {
-                alert("Check your email and password");
+            .catch((error) => {
+                alert("Account already exists");
+                this.setState({...oldState, submitting: false});
             });
 
         }
         else{
 
             var errorString = "Please check the following fields: ";
-            if(errors.name || properInput != "true")
+            if(businessAddress === false){
+                errorString += '- account type'
+            }
+            if(errors.name)
             {
                errorString += "- name ";
             }
                 
-            if(errors.phone || properInput != "true")
+            if(errors.phone)
             {
                 errorString += "- phone ";
             }
                 
-            if(errors.email || properInput != "true")
+            if(errors.email)
             {
                 errorString += "- email ";
             } 
             
-            if(errors.address || properInput != "true")
+            if(errors.address)
             {
                 errorString += "- address ";
             }
 
-            if(errors.password || properInput != "true")
+            if(errors.password)
             {
                 errorString += "- password ";
             }
             
-            if(errors.bio || properInput != "true")
+            if(errors.bio)
             {
                 errorString += "- bio ";
             }
