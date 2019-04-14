@@ -2,13 +2,15 @@ import React, {Component} from 'react';
 //import {auth} from '../../backend/Firebase';
 import { withStyles } from '@material-ui/core/styles';
 import Layout from '../../components/Layout/Layout';
-import {db, storage} from '../../backend/Firebase';
+import {db, storage, auth} from '../../backend/Firebase';
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import PostCard from '../../components/PostCard/PostCard';
 import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+
 
 const styles = {
     card: {
@@ -42,6 +44,10 @@ class Profile extends Component {
 
     componentDidMount = () => {
         const userID = this.props.match.params.id;
+        let currentUser = null;
+        if(auth.currentUser){
+            currentUser = auth.currentUser.uid;
+        }
         storage.ref('users/'+userID).getDownloadURL().then((url) => {
             const oldState = this.state;
             this.setState({...oldState, image: url});
@@ -61,12 +67,55 @@ class Profile extends Component {
         }).catch(function(error) {
             alert("Error getting document:", error);
         });
+
+        if(userID == currentUser){
+            const oldState = {...oldState};
+            let posts = [];
+            db.collection("posts").where("auth_id", "==", userID).get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    posts.push({...doc.data(), id: doc.id});
+                });
+                this.setState({...oldState, posts: posts})
+            });
+        }
+    }
+
+    deletePost = (event, index) => {
+        var toDelete = this.state.posts[index].id;
+        db.collection('posts').doc(toDelete).delete().then(()=>{
+            this.componentDidMount();
+        })
     }
 
     render(){
         const { classes } = this.props;
         console.log(this.state);
-
+        
+        let Posts = this.state.posts;
+        if(Posts){
+            Posts = Posts.map((post, index) => {
+            return (
+                <Card
+                    key = {index}
+                >   
+                    <CardContent>
+                    <Grid
+                        justify="space-between" // Add it here :)
+                        container 
+                    >
+                        <Typography variant="h6">{post.title}</Typography>
+                        <Button variant="contained" 
+                                color="secondary"
+                                onClick={(event) => this.deletePost(event, index)}>
+                            Delete
+                        </Button>
+                    </Grid>
+                    </CardContent>
+                </Card>
+                )
+            });
+        }
         return (
             <Layout isHome>
             {this.state.user ?
@@ -107,6 +156,8 @@ class Profile extends Component {
                     <Typography variant="body">
                         {this.state.user.bio}
                     </Typography>
+                    <br/>
+                    {Posts}
                     
                 </Grid>
             </CardContent>

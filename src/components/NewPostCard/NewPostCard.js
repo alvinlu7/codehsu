@@ -77,15 +77,11 @@ function SimpleCard(props) {
 
     <TextField
         id= "pitch"
-<<<<<<< HEAD
-        label = "Pitch (Less than 500 character)"
-=======
         label = "Pitch (Less than 500 characters)"
         type = "text"
         inputProps = {{maxLength:"500"}}
         multiline
         rows = "5"
->>>>>>> fbb398ede3b108b3654532f9ba6a4b263e42133d
         value = {props.pitch}
         onChange = {props.pitchChangedHandler}
         error = {props.errors.pitch}
