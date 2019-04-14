@@ -61,6 +61,13 @@ class Splash extends Component {
         this.setState({...oldState, password: event.target.value});
     }
 
+    loginEnter = (event) => {
+        console.log("key pressed")
+        if(event.key === 'Enter'){
+            this.onLogin();
+        }
+    }
+
     render(){
         return (
             <div className="mobile-wrapper">
@@ -86,6 +93,7 @@ class Splash extends Component {
                         password={this.state.password}
                         passwordChange={this.onPasswordChange}
                         login={this.onLogin}
+                        loginEnter={this.loginEnter}
                     />
                    
                 </div>
@@ -111,6 +119,7 @@ class Splash extends Component {
                             password={this.state.password}
                             passwordChange={this.onPasswordChange}
                             login={this.onLogin}
+                            loginEnter={this.loginEnter}
                         />
                     </Grid>
                 </MobileView>
